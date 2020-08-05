@@ -1,5 +1,5 @@
 ## COVID-19 Tracker
-A react app that track COVID-19 Data
+A react app that tracks COVID-19 Data
 
 **Download**
 
