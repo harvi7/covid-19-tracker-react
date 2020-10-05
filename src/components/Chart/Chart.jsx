@@ -1,50 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { fetchDailyData } from '../../api';
-import { Line, Bar } from 'react-chartjs-2';
+import React, { useState } from 'react';
+import { Bar } from 'react-chartjs-2';
 
 import styles from './Chart.module.css';
+import LineGraph from '../LineGraph/LineGraph';
+import { Button } from '@material-ui/core';
 
 const Chart = ({ data: { confirmed, deaths, recovered }, country }) => {
-    const [dailyData, setDailyData] = useState([]);
-
-    useEffect(() => {
-        const fetchAPI = async () => {
-            setDailyData(await fetchDailyData());
-        }
-
-        // console.log(dailyData.map(({ confirmed }) => confirmed));
-        
-
-        fetchAPI();
-    }, []);
-
-    const lineChart = (
-        dailyData.length 
-            ? <Line 
-                data = {{
-                labels: dailyData.map(({ date }) => date),
-                datasets: [{ 
-                    data: dailyData.map(({ confirmed }) => confirmed),
-                    label: "Infected",
-                    borderColor: "#3333ff",
-                    fill: true
-                }, { 
-                    data: dailyData.map(({ deaths }) => deaths),
-                    label: "Recovered",
-                    borderColor: "red",
-                    backgroundColor: "#ff9999",
-                    fill: true
-                    }],
-                }} 
-            /> : null
-    );
-
-    console.log(confirmed, recovered, deaths);
+    const [caseType, setCaseType] = useState("cases")  
 
     const barChart = (
         confirmed
             ?   (
-                <Bar
+                <div style={{width:"900px"}}>
+                    <Bar
                     data={{
                         labels: ['Infected', 'Recovered', 'Deaths'],
                         datasets: [{
@@ -62,13 +30,26 @@ const Chart = ({ data: { confirmed, deaths, recovered }, country }) => {
                         title: { display: true, text: `Current state in ${country}`},
                     }}
                 />
+                </div>
+                
             ) : null
     )
 
     return (
-        <div className={styles.container}>
-          {country ? barChart : lineChart}
+        <div>
+            <div className={styles.container}>
+                {country ? barChart : 
+                <div className={styles.linechart}>
+                    <div className={styles.button}>
+                        <Button onClick={(e)=> setCaseType("cases")}>cases</Button>
+                        <Button onClick={(e)=> setCaseType("recovered")}>recovered</Button>
+                        <Button onClick={(e)=> setCaseType("deaths")}>deaths</Button>
+                    </div>
+                    <LineGraph className="app__graph" casesType={caseType} />
+                </div>}
+            </div>
         </div>
+        
       )
 }   
 

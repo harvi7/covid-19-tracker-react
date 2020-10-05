@@ -1,7 +1,16 @@
 .container {
     display: flex;
-    justify-content: center;
-    width: 85%;    
+    justify-content: center;  
+}
+
+.linechart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button {
+    border: 2px solid red;
 }
 
 @media (max-width: 770px) {
